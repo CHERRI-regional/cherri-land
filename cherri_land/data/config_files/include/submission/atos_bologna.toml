@@ -1,0 +1,56 @@
+[submission]
+default_submit_type = "serial"
+lfftw = true
+module_initpath = "/usr/local/apps/lmod/8.6.8/init"
+nproma = -32
+
+[submission.types.serial]
+NPROC = 1
+NPROCX = 1
+NPROCY = 1
+SCHOST = "hpc"
+tasks = []
+WRAPPER = "srun"
+
+[submission.types.serial.BATCH]
+NAME = "#SBATCH --job-name=@TASK_NAME@"
+NODES = "#SBATCH --nodes=1"
+NTASKS = "#SBATCH --ntasks=1"
+QOS = "#SBATCH --qos=nf"
+WALLSIGNAL = "#SBATCH --signal=USR1@30"
+WALLTIME = "#SBATCH --time=00:15:00"
+
+[submission.types.serial.ENV]
+DR_HOOK_IGNORE_SIGNALS = -1
+OMP_NUM_THREADS = 1
+OMPI_MCA_btl = "^vader"
+
+[submission.types.serial.MODULES]
+
+[submission.types.anemoi]
+NPROC = 1
+NPROCX = 1
+NPROCY = 1
+SCHOST = "hpc"
+tasks = [
+  "AILand"
+]
+WRAPPER = "srun"
+
+[submission.types.anemoi.BATCH]
+WALLTIME = "#SBATCH --time=01:00:00"
+PARTITION = "#SBATCH --partition=gpu"
+NTASKS = "#SBATCH --ntasks-per-node=4"
+CORES = "#SBATCH --cpus-per-task=4"
+GPUS = "#SBATCH --gpus=4"
+QOS = "#SBATCH --qos=ng"
+MEM = "#SBATCH --mem=24GB"
+NODES = "#SBATCH --nodes=1"
+WALLSIGNAL = "#SBATCH --signal=USR1@30"
+
+[submission.types.anemoi.MODULES]
+ECMWFTOOLBOX = ["load", "ecmwf-toolbox/2026.01.0.0"]
+ENV = [
+  "source",
+  "/etc/ecmwf/nfs/dh2_perm_b/nor0362/multi-domain-prod-venv-test/bin/activate"
+]
